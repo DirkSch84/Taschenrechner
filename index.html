@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        overflow: hidden;
+      }
+
+      #zwischenstand {
+        font-size: 1.5rem;
+        text-align: right;
+        height: 2rem;
+      }
+
+      #eingabe {
+        font-size: 2.5rem;
+        text-align: right;
+        height: 3rem;
+      }
+
+      .grid-container {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        gap: 0.2rem;
+      }
+
+      .grid-item {
+        font-size: 2rem;
+        height: 5rem;
+        border-radius: 5px;
+        border: solid 1px #bbb;
+      }
+
+      #verlauf {
+        width: 15rem;
+        font-size: 2rem;
+        padding: 1rem;
+        border-left: solid 1px #ddd;
+        height: 100vh;
+        text-align: right;
+        overflow-y: auto;
+      }
+
+      .wrapper {
+        display: flex;
+      }
+
+      .calculator {
+        flex: 1;
+        padding-right: 1rem;
+      }
+    </style>
+
+    <script>
+      let currentInput = 0;
+      let previousInput = 0;
+      let operator = "+";
+      let verlauf = "";
+
+      // Zahl ins Eingabefeld eingeben
+      function number(zahl) {
+        if (operator === "=") {
+          previousInput = 0;
+          currentInput = 0;
+          operator = "+";
+          verlauf = "";
+          updatePreviousInput("");
+          updateCurrentInput(currentInput);
+        }
+        console.log(currentInput);
+        // 1 --> 1 * 10 + 1 --> 11
+        currentInput = currentInput * 10 + zahl;
+        console.log(currentInput);
+        updateCurrentInput(currentInput);
+      }
+
+      // zahlen sollen addiert werden
+      function add() {
+        perFormOperator();
+        operator = "+";
+        updatePreviousInput(previousInput + operator);
+
+        /**
+         * 1. Input (1)
+         * 2. Add
+         * 3.Gebe zahl ein (2)
+         * subtract
+         * 1 + 2 ausführen und als Ergebins gespeichert
+         * gebe eine Zahl ein
+         * Multiply
+         * 3-1 ausgeführt (2)
+         * gebe ein Zahl ein
+         * Operator
+         * 2 * 2ausgeführt
+         * */
+      }
+
+      // Zahlen sollen subtahiert werden
+      function subtract() {
+        perFormOperator();
+        operator = "-";
+        updatePreviousInput(previousInput + operator);
+      }
+
+      // Zahlen sollen Multipliziert werden
+      function multiply() {
+        perFormOperator();
+        operator = "*";
+        updatePreviousInput(previousInput + operator);
+      }
+
+      //   Zahlen sollen dividiert werden
+      function devide() {
+        perFormOperator();
+        operator = "/";
+        updatePreviousInput(previousInput + operator);
+      }
+
+      //   Summer bilden
+      function enter() {
+        perFormOperator();
+        operator = "=";
+        updatePreviousInput(previousInput + operator);
+        updateCurrentInput(previousInput);
+      }
+
+      function perFormOperator() {
+        let currentResult = 0;
+        if (operator === "+") {
+          currentResult = previousInput + currentInput;
+        } else if (operator === "-") {
+          currentResult = previousInput - currentInput;
+        } else if (operator === "*") {
+          currentResult = previousInput * currentInput;
+        } else if (operator === "/") {
+          currentResult = previousInput / currentInput;
+        }
+        // previousInput + currentInput = currentresult
+        if (operator !== "=") {
+          let verlaufstring =
+            "<p>" +
+            previousInput +
+            operator +
+            currentInput +
+            "=" +
+            currentResult +
+            "</p>";
+          verlauf = verlaufstring + verlauf;
+          udateVerlauf();
+          // previous = 1 ; current = 1
+          previousInput = currentResult;
+        }
+
+        currentInput = 0;
+
+        updateCurrentInput(currentInput);
+      }
+
+      // alles zurücksetzen
+      function clearCalculator() {
+        currentInput = 0;
+        previousInput = 0;
+        operator = "+";
+        updatePreviousInput("");
+        updateCurrentInput("");
+        updateVerlauf();
+      }
+
+      function updateCurrentInput(text) {
+        document.getElementById("eingabe").innerHTML = text;
+      }
+
+      function updatePreviousInput(text) {
+        document.getElementById("zwischenstand").innerHTML = text;
+      }
+
+      function udateVerlauf() {
+        document.getElementById("verlauf").innerHTML = verlauf;
+      }
+    </script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="calculator">
+        <div id="zwischenstand">0</div>
+        <div id="eingabe">0</div>
+        <div class="grid-container">
+          <button class="grid-item" onclick="number(7)">7</button
+          ><button class="grid-item" onclick="number(8)">8</button
+          ><button class="grid-item" onclick="number(9)">9</button
+          ><button class="grid-item" onclick="devide()">/</button>
+          <button class="grid-item" onclick="number(4)">4</button
+          ><button class="grid-item" onclick="number(5)">5</button
+          ><button class="grid-item" onclick="number(6)">6</button
+          ><button class="grid-item" onclick="multiply()">*</button>
+          <button class="grid-item" onclick="number(1)">1</button
+          ><button class="grid-item" onclick="number(2)">2</button
+          ><button class="grid-item" onclick="number(3)">3</button
+          ><button class="grid-item" onclick="subtract()">-</button>
+          <button class="grid-item" onclick="clearCalculator()">CE</button
+          ><button class="grid-item" onclick="number(0)">0</button
+          ><button class="grid-item" onclick="enter()">=</button
+          ><button class="grid-item" onclick="add()">+</button>
+        </div>
+      </div>
+      <div id="verlauf"></div>
+    </div>
+  </body>
+</html>
